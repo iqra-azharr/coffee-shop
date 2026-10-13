@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Cozy Bean Café · Karachi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --ink:    #1a1208;
+  --roast:  #3d2007;
+  --amber:  #c8793a;
+  --sand:   #f0e8d8;
+  --parch:  #faf6ee;
+  --steam:  #fffdf9;
+  --blush:  #d4836a;
+  --sage:   #7a9474;
+  --muted:  #8a7260;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--steam);
+  color: var(--ink);
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+}
+
+/* ── CURSOR RING ── */
+.cursor-ring {
+  position: fixed;
+  width: 36px; height: 36px;
+  border: 1.5px solid var(--amber);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%,-50%);
+  transition: transform 0.12s ease, width 0.2s, height 0.2s, opacity 0.2s;
+  mix-blend-mode: multiply;
+}
+
+/* ── HEADER ── */
+header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  padding: 0 48px;
+  transition: background 0.4s;
+}
+header.opaque {
+  background: rgba(250,246,238,0.94);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(200,121,58,0.12);
+}
+.nav-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 0;
+}
+.wordmark {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--roast);
+  text-decoration: none;
+}
+.wordmark em { font-style: italic; color: var(--amber); }
+nav a {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-decoration: none;
+  margin-left: 44px;
+  transition: color 0.2s;
+}
+nav a:hover { color: var(--amber); }
+
+/* ── HERO ── */
+.hero {
+  height: 100svh;
+  min-height: 620px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  position: relative;
+  overflow: hidden;
+}
+.hero-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0 64px 72px;
+  background: var(--parch);
+  position: relative;
+  z-index: 2;
+}
+.hero-left::after {
+  content: '';
+  position: absolute;
+  right: -1px; top: 0; bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, var(--amber) 40%, var(--amber) 60%, transparent);
+  opacity: 0.4;
+}
+.hero-tag {
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--amber);
+  margin-bottom: 28px;
+  opacity: 0;
+  animation: up 0.7s 0.3s forwards;
+}
+.hero-h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(52px, 5.5vw, 82px);
+  font-weight: 300;
+  line-height: 1.06;
+  color: var(--roast);
+  margin-bottom: 28px;
+  opacity: 0;
+  animation: up 0.8s 0.5s forwards;
+}
+.hero-h1 em {
+  font-style: italic;
+  color: var(--amber);
+}
+.hero-sub {
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.7;
+  max-width: 380px;
+  margin-bottom: 48px;
+  opacity: 0;
+  animation: up 0.8s 0.7s forwards;
+}
+.hero-actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  opacity: 0;
+  animation: up 0.8s 0.9s forwards;
+}
+
+/* ── HERO RIGHT (image mosaic) ── */
+.hero-right {
+  position: relative;
+  overflow: hidden;
+}
+.hero-right img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: sepia(0.18) brightness(0.88);
+  transform: scale(1.04);
+  animation: zoomout 12s ease-out forwards;
+}
+/* vertical text on image */
+.hero-vert {
+  position: absolute;
+  right: 24px;
+  bottom: 80px;
+  writing-mode: vertical-rl;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+}
+/* scrolling ticker on hero bottom */
+.ticker-wrap {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 44px;
+  background: var(--amber);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  z-index: 10;
+}
+.ticker-track {
+  display: flex;
+  gap: 0;
+  white-space: nowrap;
+  animation: ticker 22s linear infinite;
+}
+.ticker-item {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: white;
+  padding: 0 40px;
+}
+.ticker-dot {
+  color: rgba(255,255,255,0.4);
+  padding: 0 4px;
+}
+
+@keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes zoomout { from { transform: scale(1.06); } to { transform: scale(1); } }
+@keyframes up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── BUTTONS ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 32px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+  transition: all 0.28s ease;
+  border-radius: 0;
+}
+.btn-fill {
+  background: var(--amber);
+  color: white;
+}
+.btn-fill:hover {
+  background: var(--roast);
+  transform: translateY(-2px);
+}
+.btn-line {
+  background: transparent;
+  color: var(--roast);
+  border: 1px solid currentColor;
+}
+.btn-line:hover {
+  background: var(--roast);
+  color: white;
+}
+.btn-arrow::after { content: '→'; font-size: 14px; transition: transform 0.2s; }
+.btn-arrow:hover::after { transform: translateX(4px); }
+
+/* ── SECTION WRAPPER ── */
+.wrap {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+.section-pad { padding: 112px 0; }
+
+/* section label */
+.label {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--amber);
+  margin-bottom: 20px;
+}
+.label::before {
+  content: '';
+  display: block;
+  width: 32px;
+  height: 1px;
+  background: currentColor;
+}
+
+/* ── ABOUT BAND ── */
+.about-band {
+  background: var(--roast);
+  color: var(--sand);
+  padding: 88px 0;
+  position: relative;
+  overflow: hidden;
+}
+.about-band::before {
+  content: 'BEAN';
+  position: absolute;
+  right: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 240px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.03);
+  line-height: 1;
+  pointer-events: none;
+}
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+.about-heading {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(36px, 3.5vw, 52px);
+  font-weight: 300;
+  line-height: 1.15;
+  color: var(--sand);
+  margin-bottom: 28px;
+}
+.about-heading em {
+  font-style: italic;
+  color: var(--amber);
+}
+.about-text {
+  font-size: 15px;
+  line-height: 1.8;
+  color: rgba(240,232,216,0.65);
+  margin-bottom: 32px;
+}
+.about-stat {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 24px;
+  border-top: 1px solid rgba(200,121,58,0.25);
+  padding-top: 32px;
+  margin-top: 8px;
+}
+.stat-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 44px;
+  font-weight: 300;
+  color: var(--amber);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.stat-label {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(240,232,216,0.45);
+}
+.about-img-stack {
+  position: relative;
+  height: 480px;
+}
+.stack-img {
+  position: absolute;
+  object-fit: cover;
+  border-radius: 2px;
+}
+.stack-img.a {
+  width: 72%;
+  height: 78%;
+  top: 0; right: 0;
+  filter: sepia(0.1) brightness(0.9);
+}
+.stack-img.b {
+  width: 52%;
+  height: 52%;
+  bottom: 0; left: 0;
+  border: 6px solid var(--roast);
+  filter: sepia(0.2) brightness(0.85);
+}
+.stack-badge {
+  position: absolute;
+  bottom: 60px; right: 20px;
+  background: var(--amber);
+  color: white;
+  padding: 14px 18px;
+  text-align: center;
+}
+.stack-badge span {
+  display: block;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px;
+  font-weight: 300;
+  line-height: 1;
+}
+.stack-badge small {
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+/* ── MENU SECTION ── */
+.menu-section {
+  background: var(--parch);
+  padding: 112px 0;
+}
+.menu-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 56px;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+.menu-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(36px, 4vw, 58px);
+  font-weight: 300;
+  line-height: 1.1;
+}
+.menu-title em { font-style: italic; color: var(--amber); }
+
+/* TABS */
+.tab-row {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid rgba(61,32,7,0.12);
+  margin-bottom: 48px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.tab-row::-webkit-scrollbar { display: none; }
+.tab-btn {
+  background: none;
+  border: none;
+  padding: 14px 28px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  cursor: pointer;
+  white-space: nowrap;
+  position: relative;
+  transition: color 0.22s;
+}
+.tab-btn::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; left: 0; right: 0;
+  height: 2px;
+  background: var(--amber);
+  transform: scaleX(0);
+  transition: transform 0.22s ease;
+}
+.tab-btn.active, .tab-btn:hover { color: var(--roast); }
+.tab-btn.active::after { transform: scaleX(1); }
+
+/* GRID */
+.menu-grid { display: none; }
+.menu-grid.active {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 2px;
+  animation: fadein 0.4s ease;
+}
+@keyframes fadein { from { opacity:0; } to { opacity:1; } }
+
+.card {
+  background: var(--steam);
+  overflow: hidden;
+  position: relative;
+  cursor: default;
+  group: '';
+}
+.card-img {
+  overflow: hidden;
+  aspect-ratio: 4/3;
+}
+.card-img img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(.25,.46,.45,.94);
+  display: block;
+  filter: sepia(0.08) brightness(0.95);
+}
+.card:hover .card-img img { transform: scale(1.07); }
+.card-body { padding: 24px 22px 22px; }
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+.card-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--roast);
+}
+.card-price {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--amber);
+}
+.card-desc {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.card-pill {
+  position: absolute;
+  top: 14px; left: 14px;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  background: var(--amber);
+  color: white;
+}
+.card-pill.new  { background: var(--sage); }
+.card-pill.hot  { background: var(--blush); }
+
+/* ── QUOTE BREAK ── */
+.quote-break {
+  background: var(--ink);
+  padding: 88px 48px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.quote-break::before {
+  content: '"';
+  position: absolute;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 500px;
+  line-height: 1;
+  top: -80px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(200,121,58,0.06);
+  pointer-events: none;
+}
+.quote-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(28px, 4vw, 52px);
+  font-weight: 300;
+  font-style: italic;
+  color: var(--sand);
+  line-height: 1.25;
+  max-width: 800px;
+  margin: 0 auto 20px;
+  position: relative;
+}
+.quote-attr {
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--amber);
+}
+
+/* ── HOURS BAR ── */
+.hours-bar {
+  background: var(--sand);
+  padding: 48px 0;
+}
+.hours-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 64px;
+  flex-wrap: wrap;
+}
+.hour-item {
+  text-align: center;
+}
+.hour-day {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.hour-time {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--roast);
+}
+.hours-divider {
+  width: 1px;
+  height: 40px;
+  background: rgba(61,32,7,0.15);
+}
+
+/* ── BOOKING ── */
+.booking-section {
+  background: var(--parch);
+  padding: 112px 0;
+}
+.booking-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+}
+.booking-info h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(36px, 3.5vw, 52px);
+  font-weight: 300;
+  line-height: 1.15;
+  margin-bottom: 24px;
+}
+.booking-info h2 em { font-style: italic; color: var(--amber); }
+.booking-info p {
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.8;
+  margin-bottom: 40px;
+}
+.info-line {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  color: var(--roast);
+}
+.info-icon {
+  width: 36px; height: 36px;
+  background: var(--amber);
+  color: white;
+  display: grid;
+  place-items: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+/* FORM */
+.form-panel {
+  background: white;
+  padding: 48px 40px;
+  border-top: 3px solid var(--amber);
+}
+.form-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px;
+  font-weight: 400;
+  margin-bottom: 32px;
+  color: var(--roast);
+}
+.fg {
+  margin-bottom: 20px;
+}
+.fg label {
+  display: block;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.fg input, .fg select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #e0d4c4;
+  background: var(--parch);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  color: var(--ink);
+  outline: none;
+  border-radius: 0;
+  transition: border-color 0.2s;
+  appearance: none;
+}
+.fg input:focus, .fg select:focus { border-color: var(--amber); }
+.fg-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.success-note {
+  display: none;
+  background: #f2f9f2;
+  border-left: 3px solid var(--sage);
+  color: #2a5e2a;
+  padding: 14px 18px;
+  font-size: 14px;
+  margin-top: 20px;
+}
+
+/* ORDER FORM */
+.order-panel {
+  background: white;
+  padding: 48px 40px;
+  border-top: 3px solid var(--roast);
+  margin-top: 24px;
+}
+#orderResult {
+  margin-top: 20px;
+  padding: 20px;
+  background: var(--parch);
+  font-size: 14px;
+  display: none;
+}
+#orderResult p { margin-bottom: 6px; }
+#orderResult strong { color: var(--roast); }
+
+/* ── FOOTER ── */
+footer {
+  background: var(--ink);
+  color: rgba(240,232,216,0.45);
+  padding: 64px 48px 40px;
+}
+.footer-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 32px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid rgba(200,121,58,0.12);
+  margin-bottom: 32px;
+}
+.foot-brand {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px;
+  font-weight: 300;
+  color: var(--sand);
+  letter-spacing: 0.06em;
+}
+.foot-brand em { font-style: italic; color: var(--amber); }
+.foot-links {
+  display: flex;
+  gap: 32px;
+}
+.foot-links a {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(240,232,216,0.4);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.foot-links a:hover { color: var(--amber); }
+.foot-copy {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 12px;
+  color: rgba(240,232,216,0.25);
+}
+
+/* ── REVEAL ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.in { opacity: 1; transform: none; }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .hero { grid-template-columns: 1fr; }
+  .hero-right { display: none; }
+  .hero-left { min-height: 100svh; justify-content: flex-end; padding: 0 32px 80px; }
+  .about-grid, .booking-layout { grid-template-columns: 1fr; }
+  .about-img-stack { height: 320px; }
+  header { padding: 0 24px; }
+  .wrap { padding: 0 24px; }
+  .booking-section { padding: 80px 0; }
+  .form-panel, .order-panel { padding: 32px 24px; }
+  .hours-divider { display: none; }
+  .footer-inner { flex-direction: column; align-items: flex-start; }
+}
+@media (max-width: 600px) {
+  .fg-row { grid-template-columns: 1fr; }
+  .hero-left { padding: 0 24px 72px; }
+  .menu-grid.active { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 420px) {
+  .menu-grid.active { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- cursor ring -->
+<div class="cursor-ring" id="cursor"></div>
+
+<!-- HEADER -->
+<header id="hdr">
+  <div class="nav-inner">
+    <a class="wordmark" href="#">The Cozy <em>Bean</em></a>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#menu">Menu</a>
+      <a href="#book">Reserve</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <p class="hero-tag">Est. 2020 · Karachi, Pakistan</p>
+    <h1 class="hero-h1">Where every<br>sip tells a<br><em>story.</em></h1>
+    <p class="hero-sub">Slow mornings, rich aromas, and artisan bites crafted for those who savour the moment.</p>
+    <div class="hero-actions">
+      <a href="#menu" class="btn btn-fill btn-arrow">Explore Menu</a>
+      <a href="#book" class="btn btn-line">Reserve a Table</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=1200&q=80" alt="Café interior">
+    <span class="hero-vert">Open Daily · 8am – 11pm</span>
+  </div>
+  <!-- ticker -->
+  <div class="ticker-wrap">
+    <div class="ticker-track" id="tickerTrack">
+      <span class="ticker-item">Specialty Coffee</span><span class="ticker-dot">·</span>
+      <span class="ticker-item">Artisan Bakery</span><span class="ticker-dot">·</span>
+      <span class="ticker-item">Desi Chai</span><span class="ticker-dot">·</span>
+      <span class="ticker-item">Weekend Brunch</span><span class="ticker-dot">·</span>
+      <span class="ticker-item">Signature Desserts</span><span class="ticker-dot">·</span>
+      <span class="ticker-item">Karachi, Pakistan</span><span class="ticker-dot">·</span>
+      <span class="ticker-item">Specialty Coffee</span><span class="ticker-dot">·</span>
+      <span class="ticker-item">Artisan Bakery</span><span class="ticker-dot">·</span>
+      <span class="ticker-item">Desi Chai</span><span class="ticker-dot">·</span>
+      <span class="ticker-item">Weekend Brunch</span><span class="ticker-dot">·</span>
+      <span class="ticker-item">Signature Desserts</span><span class="ticker-dot">·</span>
+      <span class="ticker-item">Karachi, Pakistan</span><span class="ticker-dot">·</span>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="about-band">
+  <div class="wrap">
+    <div class="about-grid">
+      <div>
+        <p class="label reveal" style="color:var(--amber);">Our Story</p>
+        <h2 class="about-heading reveal reveal-delay-1">Brewed with<br><em>intention,</em><br>served with care.</h2>
+        <p class="about-text reveal reveal-delay-2">Born in 2020 in the heart of Karachi, The Cozy Bean was built around a single belief — that a great cup of coffee is a form of hospitality. Every bean is sourced with intention, every recipe refined through seasons of tasting.</p>
+        <div class="about-stat reveal reveal-delay-3">
+          <div>
+            <div class="stat-num">6+</div>
+            <div class="stat-label">Origins</div>
+          </div>
+          <div>
+            <div class="stat-num">40k</div>
+            <div class="stat-label">Cups Served</div>
+          </div>
+          <div>
+            <div class="stat-num">22</div>
+            <div class="stat-label">Menu Items</div>
+          </div>
+        </div>
+      </div>
+      <div class="about-img-stack reveal">
+        <img class="stack-img a" src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=700&q=80" alt="Barista">
+        <img class="stack-img b" src="https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=500&q=80" alt="Latte art">
+        <div class="stack-badge">
+          <span>★ 4.9</span>
+          <small>Guest Rating</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOURS -->
+<div class="hours-bar">
+  <div class="hours-inner">
+    <div class="hour-item">
+      <div class="hour-day">Mon – Thu</div>
+      <div class="hour-time">8:00 AM – 10:00 PM</div>
+    </div>
+    <div class="hours-divider"></div>
+    <div class="hour-item">
+      <div class="hour-day">Fri – Sat</div>
+      <div class="hour-time">8:00 AM – 11:00 PM</div>
+    </div>
+    <div class="hours-divider"></div>
+    <div class="hour-item">
+      <div class="hour-day">Sunday</div>
+      <div class="hour-time">9:00 AM – 9:00 PM</div>
+    </div>
+    <div class="hours-divider"></div>
+    <div class="hour-item">
+      <div class="hour-day">Location</div>
+      <div class="hour-time">Karachi, Pakistan</div>
+    </div>
+  </div>
+</div>
+
+<!-- MENU -->
+<section id="menu" class="menu-section">
+  <div class="wrap">
+    <div class="menu-header">
+      <div>
+        <p class="label reveal">What We Serve</p>
+        <h2 class="menu-title reveal reveal-delay-1">Our Craft<br><em>Menu</em></h2>
+      </div>
+    </div>
+
+    <div class="tab-row">
+      <button class="tab-btn active" data-tab="coffee">☕ Coffee</button>
+      <button class="tab-btn" data-tab="tea">🍵 Tea & Chai</button>
+      <button class="tab-btn" data-tab="bakery">🥐 Bakery</button>
+      <button class="tab-btn" data-tab="brunch">🍳 Brunch</button>
+      <button class="tab-btn" data-tab="desserts">🍮 Desserts</button>
+    </div>
+
+    <!-- COFFEE -->
+    <div id="coffee" class="menu-grid active">
+      <div class="card">
+        <div class="card-img"><img src="https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&w=600&q=80" alt="Vanilla Latte"></div>
+        <span class="card-pill">Fan Fav</span>
+        <div class="card-body">
+          <div class="card-top"><span class="card-name">Vanilla Latte</span><span class="card-price">Rs. 590</span></div>
+          <p class="card-desc">Double espresso with velvet-steamed milk and real vanilla pod syrup.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-img"><img src="https://images.unsplash.com/photo-1497515114629-f71d768fd07c?auto=format&fit=crop&w=600&q=80" alt="Cappuccino"></div>
+        <div class="card-body">
+          <div class="card-top"><span class="card-name">Cappuccino</span><span class="card-price">Rs. 550</span></div>
+          <p class="card-desc">Intense espresso balanced with airy micro-foam and a dusting of cocoa.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-img"><img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=600&q=80" alt="Cold Brew Float"></div>
+        <span class="card-pill new">New</span>
+        <div class="card-body">
+          <div class="card-top"><span class="card-name">Cold Brew Float</span><span class="card-price">Rs. 690</span></div>
+          <p class="card-desc">18-hour steeped cold brew topped with vanilla bean ice cream.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-img"><img src="https://images.unsplash.com/photo-1519682337058-a94d519337bc?auto=format&fit=crop&w=600&q=80" alt="Caramel Macchiato"></div>
+        <span class="card-pill hot">Hot Pick</span>
+        <div class="card-body">
+          <div class="card-top"><span class="card-name">Caramel Macchiato</span><span class="card-price">Rs. 620</span></div>
+          <p class="card-desc">Steamed milk, espresso, and house-made salted caramel drizzle.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-img"><img src="https://images.unsplash.com/photo-1587080413959-06b859fb107d?auto=format&fit=crop&w=600&q=80" alt="Dark Mocha"></div>
+        <div class="card-body">
+          <div class="card-top"><span class="card-name">Dark Mocha</span><span class="card-price">Rs. 640</span></div>
+          <p class="card-desc">Belgian dark chocolate blended with a ristretto shot and steamed milk.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-img"><img src="https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&w=600&q=80" alt="Americano"></div>
+        <div class="card-body">
+          <div class="card-top"><span class="card-name">Americano</span><span class="card-price">Rs. 420</span></div>
+          <p class="card-desc">Pure espresso extended with hot water. Clean, bold, no distractions.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- TEA -->
+    <div id="tea" class="menu-grid">
+      <div class="card">
+        <div class="card-img"><img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=600&q=80" alt="Kashmiri Chai"></div>
+        <span class="card-pill">Pakistani Classic</span>
+        <div class="card-body">
+          <div class="card-top"><span class="card-name">Kashmiri Pink Chai</span><span class="card-price">Rs. 480</span></div>
+          <p class="card-desc">Gunpowder tea with milk, cardamom, and rose water — poured into a dreamy pink cup.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-img"><img src="https://images.unsplash.com/photo-1567922045116-2a00fae2ed03?auto=format&fit=crop&w=600&q=80" alt="Masala Chai"></div>
+        <span class="card-pill hot">Hot Pick</span>
+        <div class="card-body">
+          <div class="card-top"><span class="card-name">Desi Masala Chai</span><span class="card-price">Rs. 320</span></div>
+          <p class="card-desc">Black tea with ginger, cinnamon, clove, and black pepper. Bold and warming.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-img"><img src="https://images.unsplash.com/photo-1563822249366-3efb23b8e0c9?auto=format&fit=crop&w=600&q=80" alt="Matcha Latte"></div>
+        <span class="card-pill new">New</span>
+        <div class="card-body">
+          <div class="card-top"><span class="card-name">Iced Matcha Latte</span><span class="card-price">Rs. 560</span></div>
+          <p class="card-desc">Ceremonial-grade matcha whisked with oat milk and honey, over ice.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-img"><img src="https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?auto=format&fit=crop&w=600&q=80" alt="Saffron Chai"></div>
+        <div class="card-body">
+          <div class="card-top"><span class="card-name">Saffron Cardamom Chai</span><span class="card-price">Rs. 520</span></div>
+          <p class="card-desc">Aromatic golden chai with kesar strands and freshly cracked cardamom pods.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- BAKERY -->
+    <div id="bakery" class="menu-grid">
+      <div class="card">
+        <div class="card-img"><img src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=600&q=80" alt="Croissant"></div>
+        <span class="card-pill">Fan Fav</span>
+        <div class="card-body">
+          <div class="card-top"><span class="card-name">Butter Croissant</span><span class="card-price">Rs. 380</span></div>
+          <p class="card-desc">Flaky, golden pastry layers made with pure French butter, baked fresh each morning.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-img"><img src="https://images.unsplash.com/photo-1607958996333-41aef7caefaa?auto=format&fit=crop&w=600&q=80" alt="Chocolate Muffin"></div>
+        <div class="card-body">
+          <div class="card-top"><span class="card-name">Double Choc Muffin</span><span class="card-price">Rs. 350</span></div>
+          <p class="card-desc">Moist chocolate batter with Belgian dark chocolate chips. Perfect with cold brew.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-img"><img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=600&q=80" alt="Sourdough"></div>
+        <span class="card-pill new">New</span>
+        <div class="card-body">
+          <div class="card-top"><span class="card-name">Sourdough Loaf</span><span class="card-price">Rs. 620</span></div>
+          <p class="card-desc">Long-fermented with a shattering crust and open crumb. Baked in-house daily.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-img"><img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=600&q=80" alt="Hazelnut Cake"></div>
+        <span class="card-pill hot">Best Seller</span>
+        <div class="card-body">
+          <div class="card-top"><span class="card-name">Nutella Hazelnut Cake</span><span class="card-price">Rs. 550</span></div>
+          <p class="card-desc">Three layers of hazelnut sponge with Nutella ganache and toasted crunch.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- BRUNCH -->
+    <div id="brunch" class="menu-grid">
+      <div class="card">
+        <div class="card-img"><img src="https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=600&q=80" alt="Avocado Toast"></div>
+        <span class="card-pill">Fan Fav</span>
+        <div class="card-body">
+          <div class="card-top"><span class="card-name">Avocado Smash Toast</span><span class="card-price">Rs. 1,100</span></div>
+          <p class="card-desc">Sourdough with smashed avocado, feta, cherry tomatoes, and chilli flakes.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-img"><img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=600&q=80" alt="Pancakes"></div>
+        <div class="card-body">
+          <div class="card-top"><span class="card-name">Buttermilk Pancakes</span><span class="card-price">Rs. 980</span></div>
+          <p class="card-desc">Fluffy golden stack with maple syrup, fresh berries, and whipped honey butter.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-img"><img src="https://images.unsplash.com/photo-1606923829579-0cb981a83e2e?auto=format&fit=crop&w=600&q=80" alt="Eggs Benedict"></div>
+        <span class="card-pill new">New</span>
+        <div class="card-body">
+          <div class="card-top"><span class="card-name">Eggs Benedict</span><span class="card-price">Rs. 1,350</span></div>
+          <p class="card-desc">Poached eggs on English muffin with smoked beef and hollandaise sauce.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-img"><img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=600&q=80" alt="Shakshuka"></div>
+        <span class="card-pill hot">Desi Twist</span>
+        <div class="card-body">
+          <div class="card-top"><span class="card-name">Spiced Shakshuka</span><span class="card-price">Rs. 1,050</span></div>
+          <p class="card-desc">Eggs in smoky tomato-pepper sauce with Pakistani spices and crusty bread.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- DESSERTS -->
+    <div id="desserts" class="menu-grid">
+      <div class="card">
+        <div class="card-img"><img src="https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=600&q=80" alt="Tiramisu"></div>
+        <span class="card-pill">Fan Fav</span>
+        <div class="card-body">
+          <div class="card-top"><span class="card-name">Classic Tiramisu</span><span class="card-price">Rs. 680</span></div>
+          <p class="card-desc">Espresso-soaked ladyfingers with mascarpone cream and a generous cocoa dusting.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-img"><img src="https://images.unsplash.com/photo-1488477181228-c84a438f69c3?auto=format&fit=crop&w=600&q=80" alt="Brownie"></div>
+        <span class="card-pill hot">Best Seller</span>
+        <div class="card-body">
+          <div class="card-top"><span class="card-name">Fudge Brownie à la Mode</span><span class="card-price">Rs. 620</span></div>
+          <p class="card-desc">Warm gooey dark chocolate brownie with vanilla ice cream and caramel drizzle.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-img"><img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=600&q=80" alt="Gulab Jamun Cheesecake"></div>
+        <span class="card-pill new">Signature</span>
+        <div class="card-body">
+          <div class="card-top"><span class="card-name">Gulab Jamun Cheesecake</span><span class="card-price">Rs. 750</span></div>
+          <p class="card-desc">Creamy vanilla cheesecake with soft gulab jamun and rose syrup. Our chef's signature fusion.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-img"><img src="https://images.unsplash.com/photo-1488900128323-21503983a07e?auto=format&fit=crop&w=600&q=80" alt="Waffles"></div>
+        <div class="card-body">
+          <div class="card-top"><span class="card-name">Belgian Waffles</span><span class="card-price">Rs. 880</span></div>
+          <p class="card-desc">Crispy-edged waffles with whipped cream, strawberry compote, and powdered sugar.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE -->
+<div class="quote-break">
+  <p class="quote-text">"Life is too short for bad coffee — and too rich for anything less than presence."</p>
+  <p class="quote-attr">— The Cozy Bean</p>
+</div>
+
+<!-- BOOKING -->
+<section id="book" class="booking-section">
+  <div class="wrap">
+    <div class="booking-layout">
+      <div class="booking-info">
+        <p class="label reveal">Come Visit Us</p>
+        <h2 class="reveal reveal-delay-1">Reserve your<br><em>table</em></h2>
+        <p class="reveal reveal-delay-2">A quiet corner, the right cup, the people you love. Book a table and let us take care of the rest.</p>
+        <div class="reveal reveal-delay-3">
+          <div class="info-line"><span class="info-icon">📍</span> Karachi, Pakistan</div>
+          <div class="info-line"><span class="info-icon">🕗</span> Open daily 8am – 11pm</div>
+          <div class="info-line"><span class="info-icon">📞</span> +92 300 000 0000</div>
+          <div class="info-line"><span class="info-icon">✉</span> hello@cozybeankarachi.com</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="form-panel reveal">
+          <h3 class="form-title">Table Reservation</h3>
+          <form id="reservationForm">
+            <div class="fg-row">
+              <div class="fg">
+                <label>Full Name</label>
+                <input type="text" id="r-name" required placeholder="Ayesha Khan">
+              </div>
+              <div class="fg">
+                <label>Email</label>
+                <input type="email" id="r-email" required placeholder="you@email.com">
+              </div>
+            </div>
+            <div class="fg-row">
+              <div class="fg">
+                <label>Guests</label>
+                <select id="r-guests">
+                  <option>1 Person</option>
+                  <option selected>2 People</option>
+                  <option>4 People</option>
+                  <option>6+ People</option>
+                </select>
+              </div>
+              <div class="fg">
+                <label>Date</label>
+                <input type="date" id="r-date" required>
+              </div>
+            </div>
+            <div class="fg">
+              <label>Preferred Time</label>
+              <select id="r-time">
+                <option>09:00 AM – Breakfast</option>
+                <option>11:00 AM – Late Morning</option>
+                <option>01:00 PM – Lunch</option>
+                <option>03:30 PM – High Tea</option>
+                <option>07:00 PM – Dinner Brunch</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-fill" style="width:100%;padding:16px;font-size:12px;justify-content:center;">Confirm Reservation →</button>
+          </form>
+          <div class="success-note" id="res-success">🎉 Confirmed! We look forward to hosting you at The Cozy Bean.</div>
+        </div>
+
+        <div class="order-panel reveal reveal-delay-1">
+          <h3 class="form-title">Place an Order</h3>
+          <form id="orderForm">
+            <div class="fg-row">
+              <div class="fg">
+                <label>Your Name</label>
+                <input type="text" id="o-name" required>
+              </div>
+              <div class="fg">
+                <label>Phone</label>
+                <input type="tel" id="o-phone" placeholder="03XXXXXXXXX" required>
+              </div>
+            </div>
+            <div class="fg">
+              <label>Menu Item</label>
+              <select id="o-item">
+                <option value="590">Vanilla Latte — Rs. 590</option>
+                <option value="550">Cappuccino — Rs. 550</option>
+                <option value="690">Cold Brew Float — Rs. 690</option>
+                <option value="620">Caramel Macchiato — Rs. 620</option>
+                <option value="640">Dark Mocha — Rs. 640</option>
+                <option value="420">Americano — Rs. 420</option>
+              </select>
+            </div>
+            <div class="fg">
+              <label>Quantity</label>
+              <input type="number" id="o-qty" min="1" value="1" required>
+            </div>
+            <button type="submit" class="btn btn-fill" style="width:100%;padding:16px;font-size:12px;justify-content:center;">Place Order →</button>
+          </form>
+          <div id="orderResult"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="foot-brand">The Cozy <em>Bean</em></div>
+    <div class="foot-links">
+      <a href="#about">About</a>
+      <a href="#menu">Menu</a>
+      <a href="#book">Reserve</a>
+    </div>
+  </div>
+  <div class="foot-copy">
+    <span>© 2026 The Cozy Bean Café, Karachi. All rights reserved.</span>
+    <span>Made with ❤️ for coffee lovers.</span>
+  </div>
+</footer>
+
+<script>
+/* ── CURSOR ── */
+const ring = document.getElementById('cursor');
+document.addEventListener('mousemove', e => {
+  ring.style.left = e.clientX + 'px';
+  ring.style.top  = e.clientY + 'px';
+});
+document.querySelectorAll('a,button').forEach(el => {
+  el.addEventListener('mouseenter', () => { ring.style.width = '54px'; ring.style.height = '54px'; ring.style.opacity = '0.6'; });
+  el.addEventListener('mouseleave', () => { ring.style.width = '36px'; ring.style.height = '36px'; ring.style.opacity = '1'; });
+});
+
+/* ── STICKY HEADER ── */
+window.addEventListener('scroll', () => {
+  document.getElementById('hdr').classList.toggle('opaque', scrollY > 60);
+});
+
+/* ── TABS ── */
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.menu-grid').forEach(g => g.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+  });
+});
+
+/* ── REVEAL ── */
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+/* ── SET DATE MIN ── */
+document.getElementById('r-date').min = new Date().toISOString().split('T')[0];
+
+/* ── RESERVATION ── */
+document.getElementById('reservationForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const ok = document.getElementById('res-success');
+  ok.style.display = 'block';
+  this.reset();
+  ok.scrollIntoView({ behavior: 'smooth', block: 'center' });
+});
+
+/* ── ORDER ── */
+document.getElementById('orderForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const name  = document.getElementById('o-name').value;
+  const phone = document.getElementById('o-phone').value;
+  const sel   = document.getElementById('o-item');
+  const item  = sel.options[sel.selectedIndex].text;
+  const price = parseInt(sel.value);
+  const qty   = parseInt(document.getElementById('o-qty').value);
+  const total = price * qty;
+  const res = document.getElementById('orderResult');
+  res.style.display = 'block';
+  res.innerHTML = `
+    <p><strong>Name:</strong> ${name}</p>
+    <p><strong>Phone:</strong> ${phone}</p>
+    <p><strong>Item:</strong> ${item}</p>
+    <p><strong>Quantity:</strong> ${qty}</p>
+    <p><strong>Total:</strong> Rs. ${total.toLocaleString()}</p>
+  `;
+  this.reset();
+});
+</script>
+</body>
+</html>
